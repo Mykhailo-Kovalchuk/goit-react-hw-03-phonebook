@@ -15,15 +15,16 @@ export class App extends Component {
 // Функція перевірки локального сховища 
 localStorageCheck () { 
   const savedContacts = localStorage.getItem('contacts');
-  console.log(savedContacts)
+  // console.log(savedContacts)
   return JSON.parse(savedContacts) || null;
 }
 
 
+
 // Функція додавання до локального сховища контакт (оновлення)
-localStorageAdd (contactsArray, newContact) {
-  const newContactsList = [...contactsArray, newContact]
-  localStorage.setItem('contacts', JSON.stringify(newContactsList))
+localStorageAdd (contactsArray) {
+  // const newContactsList = [...contactsArray, newContact]
+  localStorage.setItem('contacts', JSON.stringify(contactsArray))
 
 }
 
@@ -31,14 +32,24 @@ localStorageAdd (contactsArray, newContact) {
 /////////////////// ЖИТТЄВИЙ ЦИКЛ ///////////////////
 
 componentDidMount() { // одноразка
-console.log(this.localStorageCheck());
+// console.log(this.localStorageCheck());
 const savedLSContacts =  this.localStorageCheck();
 
-if (savedLSContacts !== null) {
- this.setState({contacts: savedLSContacts})
+if (savedLSContacts === null) {
+  return 
+} else { 
+     this.setState({contacts: savedLSContacts})
 }
 }
 
+
+componentDidUpdate (prevProps, prevState) { // оновлення локального сховища при оновленні копоненту. Якщо даних немає тоді видаляю ключ із локального сховища.
+  this.localStorageAdd(this.state.contacts);
+
+  if (this.state.contacts.length < 1){
+    localStorage.removeItem('contacts')
+  }
+}
 
 
 
