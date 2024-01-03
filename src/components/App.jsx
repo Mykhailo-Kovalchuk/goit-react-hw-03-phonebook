@@ -44,7 +44,11 @@ if (savedLSContacts === null) {
 
 
 componentDidUpdate (prevProps, prevState) { // оновлення локального сховища при оновленні копоненту. Якщо даних немає тоді видаляю ключ із локального сховища.
-  this.localStorageAdd(this.state.contacts);
+  
+    if (prevState.length !== this.state.contacts.length) { 
+      this.localStorageAdd(this.state.contacts); 
+    }
+ 
 
   if (this.state.contacts.length < 1){
     localStorage.removeItem('contacts')
